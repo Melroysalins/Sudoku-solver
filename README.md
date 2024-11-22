@@ -1,4 +1,4 @@
-### Sudoku Solver WebApp
+# Sudoku Solver WebApp
 This is a web-based Sudoku solver built using Next.js. The application allows users to:
 
 Play Sudoku: Users can input values into the Sudoku grid.
@@ -55,22 +55,22 @@ Install Dependencies: Ensure you have Node.js installed. Then, run:
 
 # Install Dependencies: Ensure you have Node.js installed. Then, run:
 npm install
-Run the Development Server: Start the Next.js development server:
+
 
 # Run the Development Server: Start the Next.js development server:
 
 npm run dev
-Access the WebApp: Open your browser and go to:
+
 
 # Access the WebApp: Open your browser and go to:\
 
 http://localhost:3000
-Build for Production: To build the project for production:
+
 
 # Build for Production: To build the project for production:
 
 npm run build
-Run in Production: Start the production server:
+
 
 
 # Usage Instructions
