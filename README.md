@@ -1,36 +1,87 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+### Sudoku Solver WebApp
+This is a web-based Sudoku solver built using Next.js. The application allows users to:
 
-## Getting Started
+Play Sudoku: Users can input values into the Sudoku grid.
 
-First, run the development server:
+Check Progress: Verify if the current entries are correct and solvable.
 
-```bash
+Solve Automatically: Automatically solve the Sudoku puzzle using a backtracking algorithm.
+
+Reset the Puzzle: Reset the grid to its initial state.
+
+Key Features
+
+Dynamic Grid Rendering:
+
+The Sudoku grid is rendered dynamically using a 2D array, where -1 represents an empty cell.
+Backtracking Algorithm:
+
+The app uses a recursive backtracking algorithm to solve the puzzle. The algorithm checks rows, columns, and 3x3 subgrids to ensure valid placements.
+Real-time Updates:
+
+Users can interact with the grid, and changes are updated in real-time using React's state management.
+Validation:
+
+The app checks if the puzzle is solvable or complete.
+User-friendly Buttons:
+
+ Check: Verifies the current state of the Sudoku grid.
+
+Reset: Resets the grid to the initial unsolved state.
+
+Solve: Automatically solves the puzzle and displays the solution.
+
+# Code Overview
+
+initialSet: Represents the initial state of the Sudoku puzzle with some pre-filled values.
+getDeepCopyArr: Creates a deep copy of the Sudoku array to avoid state mutation.
+handleInputValue: Handles user input for a specific cell.
+solver: The recursive function that solves the Sudoku puzzle using backtracking.
+handleCheckSudoko: Compares the user's grid with the solved grid and provides feedback.
+handleReset: Resets the grid to its original state.
+handleSolveSudoko: Solves the Sudoku puzzle and updates the grid.
+
+# Components
+Cell Component:
+Each cell in the Sudoku grid is represented by a Cell component. Users can input values into these cells.
+How to Run the Project
+Clone the Repository:
+
+
+Copy code
+git clone <repository-url>
+cd <project-directory>
+Install Dependencies: Ensure you have Node.js installed. Then, run:
+
+# Install Dependencies: Ensure you have Node.js installed. Then, run:
+npm install
+Run the Development Server: Start the Next.js development server:
+
+# Run the Development Server: Start the Next.js development server:
+
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Access the WebApp: Open your browser and go to:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+# Access the WebApp: Open your browser and go to:\
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+http://localhost:3000
+Build for Production: To build the project for production:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Build for Production: To build the project for production:
 
-## Learn More
+npm run build
+Run in Production: Start the production server:
 
-To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Usage Instructions
+Input Values: Click on a cell and input a number (1-9). Empty cells are represented by -1.
+Solve Automatically: Click the Solve button to see the solved puzzle.
+Check Progress: Click the Check button to verify the correctness of your inputs.
+Reset Puzzle: Click the Reset button to start over.
+Let me know if you'd like additional details or adjustments!
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+

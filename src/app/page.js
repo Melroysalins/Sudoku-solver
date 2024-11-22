@@ -1,95 +1,206 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+import Cell from "@/components/cell";
+import { useState } from "react";
 
 export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.js</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const initialSet = [
+    [-1, 5, -1, 9, -1, -1, -1, -1, -1],
+    [8, -1, -1, -1, 4, -1, 3, -1, 7],
+    [-1, -1, -1, 2, 8, -1, 1, 9, -1],
+    [5, 3, 8, 6, -1, 7, 9, 4, -1],
+    [-1, 2, -1, 3, -1, 1, -1, -1, -1],
+    [1, -1, 9, 8, -1, 4, 6, 2, 3],
+    [9, -1, 7, 4, -1, -1, -1, -1, -1],
+    [-1, 4, 5, -1, -1, -1, 2, -1, 9],
+    [-1, -1, -1, -1, 3, -1, -1, 7, -1],
+  ];
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+  const [sudokoArr, SetSudokoArr] = useState(getDeepCopyArr(initialSet));
+
+  function getDeepCopyArr(arr) {
+    return JSON.parse(JSON.stringify(arr));
+  }
+
+  const handleInputValue = (e, row, col) => {
+    let value = parseInt(e.target.value) || -1,
+      grid = getDeepCopyArr(sudokoArr);
+    if (value === -1 || value >= 1 || value <= 9) {
+      grid[row][col] = value;
+    }
+    SetSudokoArr(grid);
+  };
+
+  function compareSudokos(currentSudoko, solvedSudoko) {
+    let res = {
+      isComplete: false,
+      isSolvable: true,
+    };
+
+    for (let i = 0; i < 9; i++) {
+      for (let j = 0; j < 8; j++) {
+        if (currentSudoko[i][j] !== solvedSudoko[i][j]) {
+          if (currentSudoko[i][j] !== -1) {
+            res.isSolvable = false;
+          }
+          res.isComplete = false;
+        }
+      }
+    }
+    return res;
+  }
+
+  const handleCheckSudoko = () => {
+    let sudoko = getDeepCopyArr(initialSet);
+    solver(sudoko);
+
+    let compare = compareSudokos(sudokoArr, sudoko);
+
+    if (compare.isComplete) {
+      alert("Congratulations! You have solved Sudoku");
+    } else if (compare.isSolvable) {
+      alert("Keep going !");
+    } else {
+      alert("Sudoku can't be solved ! Try again");
+    }
+  };
+
+  const handleReset = () => {
+    let sudoko = getDeepCopyArr(initialSet);
+    SetSudokoArr(sudoko);
+  };
+
+  function checkRow(grid, row, num) {
+    return grid[row].indexOf(num) === -1;
+  }
+
+  function checkCol(grid, col, num) {
+    return grid?.map((row) => row[col]).indexOf(num) === -1;
+  }
+
+  function checkBox(grid, row, col, num) {
+    let boxArr = [];
+    let rowStart = row - (row % 3);
+    let colStart = col - (col % 3);
+
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        boxArr.push(grid[rowStart + i][colStart + j]);
+      }
+    }
+
+    return boxArr.indexOf(num) === -1;
+  }
+
+  function isCheckValid(grid, row, col, num) {
+    if (
+      checkRow(grid, row, num) &&
+      checkCol(grid, col, num) &&
+      checkBox(grid, row, col, num)
+    ) {
+      return true;
+    }
+
+    return false;
+  }
+
+  function getNext(row, col) {
+    return col !== 8 ? [row, col + 1] : row !== 8 ? [row + 1, 0] : [0, 0];
+  }
+
+  // recursive function to solve sudoko
+  function solver(grid, row = 0, col = 0) {
+    if (row === 8 && col === 8) {
+      // End of grid
+      if (grid[row][col] !== -1) return true;
+
+      for (let num = 1; num <= 9; num++) {
+        if (isCheckValid(grid, row, col, num)) {
+          grid[row][col] = num;
+          return true;
+        }
+      }
+      grid[row][col] = -1; // Reset cell
+      return false;
+    }
+
+    if (grid[row][col] !== -1) {
+      // Skip filled cells
+      let [newRow, newCol] = getNext(row, col);
+      return solver(grid, newRow, newCol);
+    }
+
+    for (let num = 1; num <= 9; num++) {
+      if (isCheckValid(grid, row, col, num)) {
+        grid[row][col] = num;
+
+        let [newRow, newCol] = getNext(row, col);
+        if (solver(grid, newRow, newCol)) {
+          return true;
+        }
+      }
+    }
+
+    grid[row][col] = -1; // Reset cell
+    return false;
+  }
+
+  const handleSolveSudoko = () => {
+    let sudoko = getDeepCopyArr(initialSet);
+
+    solver(sudoko);
+    console.log(sudoko);
+    SetSudokoArr(sudoko);
+  };
+
+  return (
+    <div className="App">
+      <h1>Sudoku Solver WebApp</h1>
+      <table className="table">
+        <tbody>
+          {[0, 1, 2, 3, 4, 5, 6, 7, 8]?.map((row, rowIndex) => {
+            return (
+              <tr
+                key={rowIndex}
+                className={(row + 1) % 3 === 0 ? "bBorder" : ""}
+              >
+                {[0, 1, 2, 3, 4, 5, 6, 7, 8]?.map((col, colIndex) => {
+                  return (
+                    <td
+                      key={colIndex + rowIndex}
+                      className={(col + 1) % 3 === 0 ? "rBorder" : ""}
+                    >
+                      <Cell
+                        key={rowIndex * colIndex}
+                        row={row}
+                        col={col}
+                        initialSet={initialSet}
+                        colvalue={
+                          sudokoArr[rowIndex][colIndex] === -1
+                            ? ""
+                            : sudokoArr[rowIndex][colIndex]
+                        }
+                        handleInputValue={handleInputValue}
+                      />
+                    </td>
+                  );
+                })}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+      <div className="button-containner">
+        <button className="check-btn" onClick={() => handleCheckSudoko()}>
+          Check
+        </button>
+        <button className="reset-btn" onClick={() => handleReset()}>
+          Reset
+        </button>
+        <button className="solve-btn" onClick={() => handleSolveSudoko()}>
+          {" "}
+          Solve
+        </button>
+      </div>
     </div>
   );
 }
