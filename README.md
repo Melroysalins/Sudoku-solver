@@ -75,9 +75,13 @@ npm run build
 
 # Usage Instructions
 Input Values: Click on a cell and input a number (1-9). Empty cells are represented by -1.
+
 Solve Automatically: Click the Solve button to see the solved puzzle.
+
 Check Progress: Click the Check button to verify the correctness of your inputs.
+
 Reset Puzzle: Click the Reset button to start over.
+
 Let me know if you'd like additional details or adjustments!
 
 
